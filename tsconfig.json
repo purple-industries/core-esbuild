@@ -15,7 +15,13 @@
     "noImplicitReturns": true,
     "typeRoots": [
       "./node_modules/@altv"
-    ]
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@southside-shared/*": [
+        "./shared-src/*"
+      ]
+    }
   },
   "include": [
     "./server-src/**/*",

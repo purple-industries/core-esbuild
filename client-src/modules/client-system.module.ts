@@ -1,5 +1,5 @@
-import { Module } from '../../shared-src/util/ModuleDecorator';
 import { PlayerModule } from './player/player.module';
+import { Module } from '@southside-shared/util/ModuleDecorator';
 
 @Module({
   imports: [PlayerModule]

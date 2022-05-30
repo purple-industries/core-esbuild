@@ -1,5 +1,6 @@
-import { On } from '../../util/decorator/EventDecorators';
 import alt, { Player } from 'alt-server';
+import { On } from '../../util/decorator/EventDecorators';
+
 
 export class PlayerModule {
   @On('playerConnect')
