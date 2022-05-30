@@ -1,4 +1,4 @@
-import { components, modules } from '../decorator/ModuleDecorator';
+import { components, modules } from './ModuleDecorator';
 import { constructor } from 'tsyringe/dist/typings/types';
 import { container, singleton } from 'tsyringe';
 

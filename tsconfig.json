@@ -13,10 +13,12 @@
     "declaration": false,
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,
-    "typeRoots": ["./node_modules/@altv"],
+    "typeRoots": [
+      "./node_modules/@altv"
+    ]
   },
   "include": [
     "./server-src/**/*",
     "./client-src/**/*"
-  ],
+  ]
 }

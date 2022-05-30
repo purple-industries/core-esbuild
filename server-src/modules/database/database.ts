@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 import { registeredEntities } from './decorator';
-import { Module } from '../../util/decorator/ModuleDecorator';
+import { Module } from '../../../shared-src/util/ModuleDecorator';
 
 @Module({})
 export class Database {

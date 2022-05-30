@@ -1,17 +1,9 @@
-import * as alt from "alt-client"
-import * as native from "natives"
-import {Entity} from "alt-client";
+import 'reflect-metadata';
+import * as native from 'natives';
+import { container } from 'tsyringe';
+import { ClientSystemModule } from './modules/client-system.module';
 
-native.setClockTime(15, 0, 0)
 
-alt.onServer('connectionComplete', () => {
-    alt.setTimeout(() => {
-        alt.log('connected');
-    },2000)
+container.resolve(ClientSystemModule);
+native.setClockTime(15, 0, 0);
 
-})
-
-alt.on('gameEntityCreate', (entity: Entity) => {
-    const isCar = entity instanceof alt.Player;
-    alt.log('Entity: ' + isCar )
-})
