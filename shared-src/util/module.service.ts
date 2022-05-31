@@ -1,8 +1,9 @@
 import { components, modules } from './ModuleDecorator';
-import { constructor } from 'tsyringe/dist/typings/types';
-import { container, singleton } from 'tsyringe';
+import { Singleton } from '@southside-shared/util/di.decorator';
+import { constructor } from '@southside-shared/util/IConstructor';
+import { container } from 'tsyringe';
 
-@singleton()
+@Singleton
 export class ModuleService {
   constructor() {
     this.initialize();
@@ -13,7 +14,9 @@ export class ModuleService {
     this.resolveFromContainer(components);
   }
 
+
   private resolveFromContainer(tokens: constructor<any>[]) {
+    console.log(tokens);
     if (tokens.length > 0)
       tokens.forEach((token: constructor<any>) => container.resolve(token));
   }

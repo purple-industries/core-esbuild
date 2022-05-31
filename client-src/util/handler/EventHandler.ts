@@ -1,12 +1,12 @@
-import alt from 'alt-client';
-import { WebViewHandler } from './WebViewHandler';
+import alt, { nextTick } from 'alt-client';
+import { container, InjectionToken, singleton } from 'tsyringe';
 
+@singleton()
 export class EventHandler {
   private static registeredEvents: RegisteredEvent[] = [];
   private static currentHighestEventID: 1;
 
   constructor() {
-    EventHandler.onWebView('client:CallServerEvent', EventHandler.emitWebViewToServer);
   }
 
   /**
@@ -14,49 +14,35 @@ export class EventHandler {
    * @param eventName
    * @param value
    */
-  static emitWebViewToServer(eventName: string, value: any): void {
+  public emitWebViewToServer(eventName: string, value: any): void {
     alt.log(eventName, value);
-    EventHandler.emitServerEvent(eventName, value);
+    this.emitServerEvent(eventName, value);
   }
 
   /**
    * Adds a handler for clientside events
-   * @param name
+   * @param eventName
    * @param callback
+   * @param context
    */
-  public static onEvent(name: string, callback: (...args: any[]) => void) {
-    alt.on(name, callback);
-    EventHandler.registeredEvents.push(new RegisteredEvent(name, EventHandler.currentHighestEventID++, callback));
-  }
+  public onClientEvent(eventName: string, callback: Function, context: Object): void {
+    nextTick(() => {
+      alt.on(eventName, callback.bind(container.resolve(context as InjectionToken)));
+    });
 
-  /**
-   * Receives an event from the webview
-   * @param name
-   * @param callback
-   */
-  public static onWebView(name: string, callback: (...args: any[]) => void) {
-    WebViewHandler.browserSource.on(name, callback);
-    EventHandler.registeredEvents.push(new RegisteredEvent(name, EventHandler.currentHighestEventID++, callback));
-  }
-
-  /**
-   * emits an event to the Webview
-   * @param name
-   * @param args
-   */
-  public static emitWebView(name: string, ...args: any[]) {
-    WebViewHandler.browserSource.emit(name, ...args);
   }
 
 
   /**
    * adds a handler for serverside events
-   * @param name
+   * @param eventName
    * @param callback
+   * @param context
    */
-  public static onServerEvent(name: string, callback: (...args: any[]) => void) {
-    alt.onServer(name, callback);
-    EventHandler.registeredEvents.push(new RegisteredEvent(name, EventHandler.currentHighestEventID++, callback));
+  public onServerEvent(eventName: string, callback: Function, context: Object): void {
+    nextTick(() => {
+      alt.onServer(eventName, callback.bind(container.resolve(context as InjectionToken)));
+    });
   }
 
   /**
@@ -64,7 +50,7 @@ export class EventHandler {
    * @param name
    * @param args
    */
-  public static emitClientEvent(name: string, ...args: any[]) {
+  public emitClientEvent(name: string, ...args: any[]) {
     alt.emit(name, ...args);
   }
 
@@ -73,11 +59,11 @@ export class EventHandler {
    * @param name
    * @param args
    */
-  public static emitServerEvent(name: string, ...args: any[]) {
+  public emitServerEvent(name: string, ...args: any[]) {
     alt.emitServer(name, ...args);
   }
 
-  public static removeEventByID(id: number) {
+  public removeEventByID(id: number) {
     let index: number = EventHandler.registeredEvents.findIndex(event => event.id === id);
     if (index === -1)
       return;
@@ -86,7 +72,7 @@ export class EventHandler {
     EventHandler.registeredEvents.splice(index, 1);
   }
 
-  public static removeEventByName(name: string) {
+  public removeEventByName(name: string) {
     let index: number = EventHandler.registeredEvents.findIndex(event => event.name === name);
     if (index === -1)
       return;

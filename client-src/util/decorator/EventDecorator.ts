@@ -1,43 +1,33 @@
 import { EventHandler } from '../handler/EventHandler';
+import { container } from 'tsyringe';
+import { GuiService } from '../../modules/gui/gui.service';
 
 export function OnServer(eventName?: string) {
-  return (object: Object, propertyName: string, descriptor: TypedPropertyDescriptor<any>) => {
-    let originalMethod = descriptor.value;
-    if (eventName) {
-      EventHandler.onServerEvent(eventName, descriptor.value.bind(this));
-    } else {
-      EventHandler.onServerEvent(propertyName, descriptor.value.bind(this));
-    }
-
-    descriptor.value = function (...args: any[]) {
-      return originalMethod.call(this, args);
-    };
-    return descriptor;
+  return (object: Object, propertyName: string, descriptor: PropertyDescriptor): void => {
+    container.resolve(EventHandler).onServerEvent(
+        eventName ?? propertyName,
+        descriptor.value,
+        object.constructor
+    );
   };
 }
 
 export function On(eventName?: string) {
-  return (object: Object, propertyName: string, descriptor: TypedPropertyDescriptor<any>) => {
-    let originalMethod = descriptor.value;
-    if (eventName) {
-      EventHandler.onEvent(eventName, descriptor.value.bind(this));
-    } else {
-      EventHandler.onEvent(propertyName, descriptor.value.bind(this));
-    }
-    descriptor.value = function (...args: any[]) {
-      return originalMethod.call(this, args);
-    };
-    return descriptor;
+  return (object: Object, propertyName: string, descriptor: PropertyDescriptor): void => {
+    container.resolve(EventHandler).onClientEvent(
+        eventName ?? propertyName,
+        descriptor.value,
+        object.constructor
+    );
   };
 }
 
 export function OnWebview(eventName: string) {
-  return (object: Object, propertyName: string, descriptor: TypedPropertyDescriptor<any>) => {
-    let originalMethod = descriptor.value;
-    EventHandler.onWebView(eventName, descriptor.value.bind(this));
-    descriptor.value = function (...args: any[]) {
-      return originalMethod.call(this, args);
-    };
-    return descriptor;
+  return (object: Object, propertyName: string, descriptor: PropertyDescriptor): void => {
+    container.resolve(GuiService).on(
+        eventName ?? propertyName,
+        descriptor.value,
+        object.constructor
+    );
   };
 }

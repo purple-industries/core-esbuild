@@ -1,6 +1,6 @@
 import { On, OnServer } from '../../util/decorator/EventDecorator';
 import { log } from 'alt-shared';
-import alt, { Entity } from 'alt-client';
+import { Entity, Player } from 'alt-client';
 
 export class PlayerModule {
 
@@ -9,9 +9,10 @@ export class PlayerModule {
     log('Player connected');
   }
 
+
   @On('gameEntityCreate')
   public onGameEntityCreated(entity: Entity) {
-    const isCar = entity instanceof alt.Player;
-    alt.log('Entity: ' + isCar);
+    const isCar = entity instanceof Player;
+    log('Entity: ' + isCar);
   }
 }

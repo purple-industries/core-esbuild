@@ -1,26 +1,21 @@
-import { off,emit, emitClient, on, onClient, Player } from 'alt-server';
+import alt, { emit, emitClient, nextTick, off, Player } from 'alt-server';
+import { container, InjectionToken, singleton } from 'tsyringe';
+
+@singleton()
 export class EventHandler {
   private static registeredEvents: RegisteredEvent[] = [];
   private static currentHighestEventID: 1;
 
   /**
-   * handles a server event
-   * @param name
-   * @param callback
-   */
-  public static onServerEvent(name: string, callback: (...args: any[]) => void) {
-    on(name, callback);
-    EventHandler.registeredEvents.push(new RegisteredEvent(name, EventHandler.currentHighestEventID++, callback));
-  }
-
-  /**
    * handles a client event
-   * @param name
+   * @param eventName
    * @param callback
+   * @param context
    */
-  public static onClientEvent(name: string, callback: (...args: any[]) => void){
-    onClient(name, callback);
-    EventHandler.registeredEvents.push(new RegisteredEvent(name, EventHandler.currentHighestEventID++, callback));
+  public onClientEvent(eventName: string, callback: Function, context: Object): void {
+    nextTick(() => {
+      alt.onClient(eventName, callback.bind(container.resolve(context as InjectionToken)));
+    });
   }
 
   /**
@@ -28,7 +23,7 @@ export class EventHandler {
    * @param name
    * @param args
    */
-  public static callServerEvent(name: string, ...args:any[]){
+  public callServerEvent(name: string, ...args: any[]) {
     emit(name, args);
   }
 
@@ -37,8 +32,8 @@ export class EventHandler {
    * @param name
    * @param args
    */
-  public static emitAllClients(name: string, ...args: any[]) {
-    emitClient(null,name, ...args);
+  public emitAllClients(name: string, ...args: any[]) {
+    emitClient(null, name, ...args);
   }
 
   /**
@@ -47,11 +42,11 @@ export class EventHandler {
    * @param name
    * @param args
    */
-  public static emitClient(player: Player|null, name: string, ...args: any[]) {
-    emitClient(player,name, ...args);
+  public emitClient(player: Player | null, name: string, ...args: any[]) {
+    emitClient(player, name, ...args);
   }
 
-  public static removeEvent(id: number) {
+  public removeEvent(id: number) {
     let index: number = EventHandler.registeredEvents.findIndex(event => event.id === id);
     if (index === -1)
       return;
@@ -59,18 +54,24 @@ export class EventHandler {
     off(event.name, event.callback);
     EventHandler.registeredEvents.splice(index, 1);
   }
+
+  /**
+   * handles a server event
+   * @param eventName
+   * @param callback
+   * @param context
+   */
+  public onServerEvent(eventName: string, callback: Function, context: Object): void {
+    nextTick(() => {
+      alt.on(eventName, callback.bind(container.resolve(context as InjectionToken)));
+    });
+  }
 }
 
 class RegisteredEvent {
   readonly _name: string;
   readonly _callback: () => void;
   readonly _id: number;
-
-  constructor(name: string, id: number, callback: (...args: any[]) => void) {
-    this._name = name;
-    this._callback = callback;
-    this._id = id;
-  }
 
   get name(): string {
     return this._name;
@@ -82,5 +83,11 @@ class RegisteredEvent {
 
   get callback(): () => void {
     return this._callback;
+  }
+
+  constructor(name: string, id: number, callback: (...args: any[]) => void) {
+    this._name = name;
+    this._callback = callback;
+    this._id = id;
   }
 }

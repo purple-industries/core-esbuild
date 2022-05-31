@@ -1,31 +1,33 @@
-import { build } from 'esbuild'
-import altvServerDev from 'esbuild-plugin-altv-dev-server'
-import commonjsPlugin from '@chialab/esbuild-plugin-commonjs';
+import {build} from 'esbuild';
+import altvServerDev from 'esbuild-plugin-altv-dev-server';
+import {esbuildDecorators} from '@anatine/esbuild-decorators';
 
 build({
   banner: {
-    js: "import { createRequire as topLevelCreateRequire } from 'module';\n const require = topLevelCreateRequire(import.meta.url);"
+    js: 'import { createRequire as topLevelCreateRequire } from \'module\';\n const require = topLevelCreateRequire(import.meta.url);',
   },
   watch: true,
   bundle: true,
   target: 'esnext',
-  logLevel: 'info',
-  format: 'cjs',
+  logLevel: 'error',
+  format: 'esm',
   entryPoints: ['./server-src/main.ts'],
   outfile: './server-dist.js',
+  tsconfig: 'tsconfig.json',
   plugins: [
-      commonjsPlugin(),
+    esbuildDecorators(),
     altvServerDev({
       hotReload: {
-        clientPath: './client-dist.js'
+        clientPath: './client-dist.js',
       },
-      reconnectPlayers: {delay: 2000}
+      reconnectPlayers: {delay: 2000},
     }),
+
   ],
   external: [
-      "fs",
-      "path",
-      "os",
-      "typeorm"
-  ]
-})
+    'fs',
+    'path',
+    'os',
+    'typeorm',
+  ],
+});

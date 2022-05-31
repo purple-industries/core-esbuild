@@ -1,68 +1,61 @@
+import { WebviewService } from '../../util/handler/WebViewHandler';
+import { ScriptEvents } from '@southside-shared/constants/ScriptEvents';
+import { container, InjectionToken, singleton } from 'tsyringe';
 import { nextTick, Vector2 } from 'alt-shared';
 import { WebView } from 'alt-client';
-import { removeAllCursors, removeCursor, showCursor } from './WebviewHelper';
-import { EventHandler } from './EventHandler';
-import { ScriptEvents } from '@southside-shared/constants/ScriptEvents';
-import { container, InjectionToken } from 'tsyringe';
+import { removeAllCursors, removeCursor, showCursor } from '../../util/handler/WebviewHelper';
+import { EventHandler } from '../../util/handler/EventHandler';
 
-export class WebviewService {
-
+@singleton()
+export class GuiService {
   /**
    * Url for webview
    *
    * @type {string}
    */
   public url: string;
-
   /**
    * Contains the name as identifier for reflection
    *
    * @type {string}
    */
   public name: string;
-
   /**
    * Render as overlay
    *
    * @type {boolean}
    */
   public isOverlay: boolean = false;
-
   /**
    * Custom webview postion
    * @type {Vector2}
    */
   public position: Vector2;
-
-
   /**
    * Custom Webview Size
    *
    * @type {Vector2}
    */
   public size: Vector2;
-
   /**
    * Hash of objet to render on
    *
    * @type {number}
    */
   public propHash: number;
-
   /**
    * Name of objects texture to replace
    *
    * @type {string}
    */
   public targetTexture: string;
-
+  public isGuiOpen: boolean = false;
   /**
    * Route name event if the webview is an spa
    * @type {string}
    * @protected
    */
   protected routeToEventName: string = 'routeTo';
-
   /**
    * Contains the webview instance
    *
@@ -79,6 +72,8 @@ export class WebviewService {
   get webviewInstance(): WebView {
     return this.webView;
   }
+
+  constructor(private readonly eventHandler: EventHandler) {}
 
   /**
    * Start the webview instance
@@ -181,6 +176,7 @@ export class WebviewService {
    * @param callback
    * @param context
    */
+  //TODO: THIS CAUSES CIRCULAR DEPENCENCY. NEEDS FIX
   public on(eventName: string, callback: Function, context: Object): void {
     nextTick(() => {
       this.webView.on(eventName, callback.bind(container.resolve(context as InjectionToken)));
@@ -195,6 +191,27 @@ export class WebviewService {
    */
   public once(eventName: string, listener: (...args: any[]) => void) {
     this.webView.once(eventName, listener);
+  }
+
+  public initWebview(): void {
+    this.url = 'http://localhost:3000/';
+    this.name = 'main';
+    this.isOverlay = false;
+    this.routeToEventName = ScriptEvents.Webview.RouteTo;
+    this.start().then(view => {
+
+    });
+
+  }
+
+  /**
+   * Changes the interactive state
+   * @param {boolean} toggle
+   * @returns {GuiService}
+   */
+  public setInteractive(toggle: boolean): GuiService {
+    toggle ? this.enableInteraction() : this.disableInteraction();
+    return this;
   }
 
   /**
@@ -219,7 +236,6 @@ export class WebviewService {
     return webview;
   }
 
-
   /**
    * Listen to event from gui and emit to server
    *
@@ -227,7 +243,7 @@ export class WebviewService {
    */
   private sendEventToServer(): void {
     this.on(ScriptEvents.Webview.EmitToServer, (eventName: string, ...args: any[]) => {
-      container.resolve(EventHandler).emitServerEvent(ScriptEvents.Webview.EmitToServer, eventName, ...args);
+      this.eventHandler.emitServerEvent(ScriptEvents.Webview.EmitToServer, eventName, ...args);
     }, this);
   }
 
@@ -237,12 +253,34 @@ export class WebviewService {
    * @private
    */
   private receiveEventFromServer(): void {
-    container.resolve(EventHandler).onServerEvent(
+    this.eventHandler.onServerEvent(
         ScriptEvents.Webview.EmitToGuiFromServer,
         (eventName: string, ...args: any[]) => {
           this.emit(eventName, ...args);
         },
         this
     );
+  }
+
+  /**
+   * Enables the interactions with the webview
+   * @private
+   */
+  private enableInteraction(): void {
+    this.focus();
+    this.showCursor();
+
+    this.isGuiOpen = true;
+  }
+
+  /**
+   * Disables the interactions with the webview
+   * @private
+   */
+  private disableInteraction(): void {
+    this.unfocus();
+    this.removeCursor();
+
+    this.isGuiOpen = false;
   }
 }

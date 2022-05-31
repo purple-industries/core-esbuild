@@ -1,5 +1,6 @@
-import { constructor } from 'tsyringe/dist/typings/types';
-import { singleton } from 'tsyringe';
+import { constructor } from '@southside-shared/util/IConstructor';
+import { container, singleton } from 'tsyringe';
+
 
 export let modules: constructor<any>[] = [];
 export let components: constructor<any>[] = [];
@@ -10,8 +11,14 @@ export function Module(options?: IModuleOptionsDecorator): (targetConstructor: c
   } else if (options && options.components) {
     components.push(...options.components);
   }
-  return (targetConstructor: constructor<any>) => singleton()(targetConstructor);
+
+  return (targetConstructor: constructor<any>) => {
+    singleton()(targetConstructor);
+    container.resolve(targetConstructor);
+  };
+
 }
+
 
 interface IModuleOptionsDecorator {
   imports?: constructor<any>[],

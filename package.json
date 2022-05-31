@@ -25,6 +25,8 @@
   },
   "type": "module",
   "devDependencies": {
-    "@chialab/esbuild-plugin-commonjs": "^0.15.37"
+    "@anatine/esbuild-decorators": "^0.2.19",
+    "@chialab/esbuild-plugin-commonjs": "^0.15.37",
+    "typescript": "^4.7.2"
   }
 }

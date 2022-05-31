@@ -1,31 +1,25 @@
 import { EventHandler } from '../wrapper/EventHandler';
+import { container } from 'tsyringe';
+
 
 export function On(eventName?: string) {
-  return (object: Object, propertyName: string, descriptor: TypedPropertyDescriptor<any>) => {
-    let originalMethod = descriptor.value;
-    if (eventName) {
-      EventHandler.onServerEvent(eventName, descriptor.value.bind(this));
-    } else {
-      EventHandler.onServerEvent(propertyName, descriptor.value.bind(this));
-    }
-    descriptor.value = function (...args: any[]) {
-      return originalMethod.call(this, args);
-    };
-    return descriptor;
+  return (object: Object, propertyName: string, descriptor: PropertyDescriptor): void => {
+    container.resolve(EventHandler).onServerEvent(
+        eventName ?? propertyName,
+        descriptor.value,
+        object.constructor
+    );
   };
 }
 
+
 export function OnClient(eventName?: string) {
-  return (object: Object, propertyName: string, descriptor: TypedPropertyDescriptor<any>) => {
-    let originalMethod = descriptor.value;
-    if (eventName) {
-      EventHandler.onClientEvent(eventName, descriptor.value.bind(this));
-    } else {
-      EventHandler.onClientEvent(propertyName, descriptor.value.bind(this));
-    }
-    descriptor.value = function (...args: any[]) {
-      return originalMethod.call(this, args);
-    };
-    return descriptor;
+  return (object: Object, propertyName: string, descriptor: PropertyDescriptor): void => {
+    container.resolve(EventHandler).onClientEvent(
+        eventName ?? propertyName,
+        descriptor.value,
+        object.constructor
+    );
   };
 }
+
