@@ -1,10 +1,12 @@
-import { nextTick, Vector2 } from 'alt-shared';
-import { WebView } from 'alt-client';
-import { removeAllCursors, removeCursor, showCursor } from './WebviewHelper';
+import { Vector2 } from 'alt-shared';
+import { nextTick, WebView } from 'alt-client';
 import { EventHandler } from './EventHandler';
+import { removeAllCursors, removeCursor, showCursor } from './WebviewHelper';
 import { ScriptEvents } from '@southside-shared/constants/ScriptEvents';
+import { Singleton } from '@southside-shared/util/di.decorator';
 import { container, InjectionToken } from 'tsyringe';
 
+@Singleton
 export class WebviewService {
 
   /**
@@ -33,7 +35,6 @@ export class WebviewService {
    * @type {Vector2}
    */
   public position: Vector2;
-
 
   /**
    * Custom Webview Size
@@ -79,6 +80,10 @@ export class WebviewService {
   get webviewInstance(): WebView {
     return this.webView;
   }
+
+  constructor(
+      private readonly eventHandler: EventHandler
+  ) {}
 
   /**
    * Start the webview instance
@@ -178,10 +183,13 @@ export class WebviewService {
    * Listen to webview Event
    *
    * @param {string} eventName
-   * @param callback
-   * @param context
+   * @param {(...args: any[]) => void} listener
    */
-  public on(eventName: string, callback: Function, context: Object): void {
+  public on(eventName: string, listener: (...args: any[]) => void) {
+    this.webView.on(eventName, listener);
+  }
+
+  public onDecorator(eventName: string, callback: Function, context: Object): void {
     nextTick(() => {
       this.webView.on(eventName, callback.bind(container.resolve(context as InjectionToken)));
     });
@@ -227,8 +235,8 @@ export class WebviewService {
    */
   private sendEventToServer(): void {
     this.on(ScriptEvents.Webview.EmitToServer, (eventName: string, ...args: any[]) => {
-      container.resolve(EventHandler).emitServerEvent(ScriptEvents.Webview.EmitToServer, eventName, ...args);
-    }, this);
+      this.eventHandler.emitServerEvent(ScriptEvents.Webview.EmitToServer, eventName, ...args);
+    });
   }
 
   /**
@@ -237,12 +245,8 @@ export class WebviewService {
    * @private
    */
   private receiveEventFromServer(): void {
-    container.resolve(EventHandler).onServerEvent(
-        ScriptEvents.Webview.EmitToGuiFromServer,
-        (eventName: string, ...args: any[]) => {
-          this.emit(eventName, ...args);
-        },
-        this
-    );
+    this.eventHandler.onServerEvent(ScriptEvents.Webview.EmitToGuiFromServer, (eventName: string, ...args: any[]) => {
+      this.emit(eventName, ...args);
+    });
   }
 }

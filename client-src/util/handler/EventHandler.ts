@@ -25,11 +25,15 @@ export class EventHandler {
    * @param callback
    * @param context
    */
-  public onClientEvent(eventName: string, callback: Function, context: Object): void {
+  public onClientEventDecorator(eventName: string, callback: Function, context: Object): void {
     nextTick(() => {
       alt.on(eventName, callback.bind(container.resolve(context as InjectionToken)));
     });
 
+  }
+
+  public onClientEvent(eventName: string, listener: (...args: any[]) => void): void {
+    alt.on(eventName, listener);
   }
 
 
@@ -39,10 +43,14 @@ export class EventHandler {
    * @param callback
    * @param context
    */
-  public onServerEvent(eventName: string, callback: Function, context: Object): void {
+  public onServerEventDecorator(eventName: string, callback: Function, context: Object): void {
     nextTick(() => {
       alt.onServer(eventName, callback.bind(container.resolve(context as InjectionToken)));
     });
+  }
+
+  public onServerEvent(eventName: string, listener: (...args: any[]) => void) {
+    alt.onServer(eventName, listener);
   }
 
   /**

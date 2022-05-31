@@ -10,6 +10,7 @@ export function On(eventName?: string) {
         object.constructor
     );
   };
+  
 }
 
 

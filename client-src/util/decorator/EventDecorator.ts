@@ -1,10 +1,11 @@
 import { EventHandler } from '../handler/EventHandler';
 import { container } from 'tsyringe';
 import { GuiService } from '../../modules/gui/gui.service';
+import { IClientEvent } from 'alt-client';
 
 export function OnServer(eventName?: string) {
   return (object: Object, propertyName: string, descriptor: PropertyDescriptor): void => {
-    container.resolve(EventHandler).onServerEvent(
+    container.resolve(EventHandler).onServerEventDecorator(
         eventName ?? propertyName,
         descriptor.value,
         object.constructor
@@ -12,9 +13,9 @@ export function OnServer(eventName?: string) {
   };
 }
 
-export function On(eventName?: string) {
+export function On(eventName?: string | keyof IClientEvent) {
   return (object: Object, propertyName: string, descriptor: PropertyDescriptor): void => {
-    container.resolve(EventHandler).onClientEvent(
+    container.resolve(EventHandler).onClientEventDecorator(
         eventName ?? propertyName,
         descriptor.value,
         object.constructor
@@ -24,7 +25,7 @@ export function On(eventName?: string) {
 
 export function OnWebview(eventName: string) {
   return (object: Object, propertyName: string, descriptor: PropertyDescriptor): void => {
-    container.resolve(GuiService).on(
+    container.resolve(GuiService).onDecorator(
         eventName ?? propertyName,
         descriptor.value,
         object.constructor

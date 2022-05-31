@@ -1,5 +1,7 @@
 import { Module } from '@southside-shared/util/ModuleDecorator';
 import { GuiService } from './gui.service';
+import { OnWebview } from '../../util/decorator/EventDecorator';
+import alt from 'alt-client';
 
 
 @Module({})
@@ -11,5 +13,12 @@ export class GuiModule {
   public initialize() {
     this.guiService.initWebview();
   }
+
+  @OnWebview('gui:test')
+  public handleTest() {
+    alt.log('hello from Web');
+    this.guiService.setRoute('/about');
+  }
+
 
 }
