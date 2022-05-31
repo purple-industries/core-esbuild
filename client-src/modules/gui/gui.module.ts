@@ -1,4 +1,4 @@
-import { Module } from '@southside-shared/util/ModuleDecorator';
+import { Module } from '@southside-shared/util/module.decorator';
 import { GuiService } from './gui.service';
 import { OnWebview } from '../../util/decorator/EventDecorator';
 import alt from 'alt-client';

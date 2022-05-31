@@ -1,4 +1,4 @@
-import { components, modules } from './ModuleDecorator';
+import { components, modules } from './module.decorator';
 import { Singleton } from '@southside-shared/util/di.decorator';
 import { constructor } from '@southside-shared/util/IConstructor';
 import { container } from 'tsyringe';
@@ -16,7 +16,6 @@ export class ModuleService {
 
 
   private resolveFromContainer(tokens: constructor<any>[]) {
-    console.log(tokens);
     if (tokens.length > 0)
       tokens.forEach((token: constructor<any>) => container.resolve(token));
   }

@@ -1,8 +1,9 @@
 import { EventHandler } from '../wrapper/EventHandler';
 import { container } from 'tsyringe';
+import { IServerEvent } from 'alt-server';
 
 
-export function On(eventName?: string) {
+export function On(eventName?: string | keyof IServerEvent) {
   return (object: Object, propertyName: string, descriptor: PropertyDescriptor): void => {
     container.resolve(EventHandler).onServerEvent(
         eventName ?? propertyName,
@@ -10,7 +11,7 @@ export function On(eventName?: string) {
         object.constructor
     );
   };
-  
+
 }
 
 
