@@ -1,6 +1,6 @@
 import { ScriptEvents } from "@southside-shared/constants/ScriptEvents";
 import { Component } from "@southside-shared/util/di.decorator";
-import { Player } from "alt-server";
+import { Player, Vector3 } from "alt-server";
 import { OnClient } from "server-src/util/decorator/EventDecorators";
 import type { IDiscordUser } from "../../../../shared-src/interfaces/IDiscordUser";
 import { AuthService } from "./auth.service";
@@ -21,5 +21,9 @@ export class AuthComponent {
 		user
 			? this.authService.loginUser(player, user)
 			: await this.authService.createAccount(player, userData);
+
+		player.spawn(162.01318359375, -1007.103271484375, 29.4483642578125);
+		player.rot = new Vector3(0, 0, 2.7211);
+		player.model = "mp_m_freemode_01";
 	}
 }
