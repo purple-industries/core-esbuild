@@ -1,4 +1,4 @@
-import { User } from "./../modules/database/entities/User";
+import { User } from "@southside-server/modules/database/entities/User";
 
 export interface PlayerInterface {
 	currentVehicle: number | null;

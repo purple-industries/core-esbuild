@@ -20,6 +20,12 @@
     "paths": {
       "@southside-shared/*": [
         "./shared-src/*"
+      ],
+      "@southside-server/*": [
+        "./server-src/*"
+      ],
+      "@southside-client/*": [
+        "./client-src/*"
       ]
     }
   },

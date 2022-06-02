@@ -1,8 +1,8 @@
 import { ScriptEvents } from "@southside-shared/constants/ScriptEvents";
+import { IDiscordUser } from "@southside-shared/interfaces/IDiscordUser";
 import { Component } from "@southside-shared/util/di.decorator";
 import { Player, Vector3 } from "alt-server";
 import { OnClient } from "server-src/util/decorator/EventDecorators";
-import type { IDiscordUser } from "../../../../shared-src/interfaces/IDiscordUser";
 import { AuthService } from "./auth.service";
 
 @Component

@@ -1,7 +1,7 @@
+import { User } from "@southside-server/modules/database/entities/User";
+import { IDiscordUser } from "@southside-shared/interfaces/IDiscordUser";
 import { Singleton } from "@southside-shared/util/di.decorator";
 import { Player } from "alt-server";
-import { IDiscordUser } from "./../../../../shared-src/interfaces/IDiscordUser";
-import { User } from "./../../database/entities/User";
 
 @Singleton
 export class AuthService {

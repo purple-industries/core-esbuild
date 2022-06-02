@@ -1,7 +1,7 @@
+import { On } from "@southside-server/util/decorator/EventDecorators";
 import { ScriptEvents } from "@southside-shared/constants/ScriptEvents";
 import { Module } from "@southside-shared/util/module.decorator";
 import { Player } from "alt-server";
-import { On } from "../../util/decorator/EventDecorators";
 import { AuthComponent } from "./auth/auth.component";
 
 @Module({
