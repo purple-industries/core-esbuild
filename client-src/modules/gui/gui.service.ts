@@ -8,7 +8,7 @@ export class GuiService extends WebviewService {
 	public isGuiOpen: boolean = false;
 
 	public initWebview(): void {
-		this.url = "http://localhost:3000/";
+		this.url = "http://localhost:3000";
 		this.name = "main";
 		this.isOverlay = false;
 		this.routeToEventName = ScriptEvents.Webview.RouteTo;
@@ -30,6 +30,11 @@ export class GuiService extends WebviewService {
 
 	public setRoute(route: string) {
 		this.emit(ScriptEvents.Webview.RouteTo, route);
+	}
+
+	public setDefaultRoute() {
+		this.setInteractive(false);
+		this.setRoute("/");
 	}
 
 	/**

@@ -1,15 +1,39 @@
-import { BaseEntity, Column, PrimaryGeneratedColumn } from "typeorm";
-import { AddEntity } from "../add-entity.decorator";
+import {
+	BaseEntity,
+	Column,
+	CreateDateColumn,
+	Entity,
+	PrimaryGeneratedColumn,
+	UpdateDateColumn,
+} from "typeorm";
 
-@AddEntity()
+@Entity()
 export class User extends BaseEntity {
 	@PrimaryGeneratedColumn("uuid")
 	id: number;
 
-	@Column({
-		unique: false,
-		length: 24,
-		type: "varchar",
-	})
+	@Column()
 	username: string;
+
+	@Column()
+	discordId: string;
+
+	@Column()
+	discordAvatarId: string;
+
+	@Column()
+	lastIp: string;
+
+	@CreateDateColumn({
+		type: "timestamp",
+		default: () => "CURRENT_TIMESTAMP(6)",
+	})
+	public created_at: Date;
+
+	@UpdateDateColumn({
+		type: "timestamp",
+		default: () => "CURRENT_TIMESTAMP(6)",
+		onUpdate: "CURRENT_TIMESTAMP(6)",
+	})
+	public updated_at: Date;
 }

@@ -1,18 +1,18 @@
-import { On, OnServer } from '../../util/decorator/EventDecorator';
-import { log } from 'alt-shared';
-import { Entity, Player } from 'alt-client';
+import { ScriptEvents } from "@southside-shared/constants/ScriptEvents";
+import { Module } from "@southside-shared/util/module.decorator";
+import alt from "alt-client";
+import { log } from "alt-shared";
+import { OnServer } from "../../util/decorator/EventDecorator";
+import { AuthComponent } from "./auth/auth.component";
 
+@Module({
+	components: [AuthComponent],
+})
 export class PlayerModule {
-
-  @OnServer('connectionComplete')
-  public OnConnectionComplete() {
-    log('Player connected');
-  }
-
-
-  @On('gameEntityCreate')
-  public onGameEntityCreated(entity: Entity) {
-    const isCar = entity instanceof Player;
-    log('Entity: ' + isCar);
-  }
+	@OnServer(ScriptEvents.Client.ConnectionComplete)
+	public OnConnectionComplete() {
+		log("Player connected");
+		alt.setStat("stamina", 100);
+		alt.setWatermarkPosition(3);
+	}
 }

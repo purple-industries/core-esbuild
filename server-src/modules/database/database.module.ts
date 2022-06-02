@@ -1,7 +1,7 @@
 import { Module } from "@southside-shared/util/module.decorator";
 import "reflect-metadata";
 import { DataSource } from "typeorm";
-import { registeredEntities } from "./add-entity.decorator";
+import { User } from "./entities/User";
 
 @Module({})
 export class Database {
@@ -19,7 +19,7 @@ export class Database {
 			username: process.env.DB_USERNAME,
 			password: process.env.DB_PASSWORD,
 			database: process.env.DB_NAME,
-			entities: [...registeredEntities],
+			entities: [User],
 			synchronize: true,
 			logging: true,
 		})
