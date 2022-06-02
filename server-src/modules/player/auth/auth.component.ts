@@ -1,5 +1,5 @@
 import { ScriptEvents } from "@southside-shared/constants/ScriptEvents";
-import { IDiscordUser } from "@southside-shared/interfaces/IDiscordUser";
+import type { IDiscordUser } from "@southside-shared/interfaces/IDiscordUser";
 import { Component } from "@southside-shared/util/di.decorator";
 import { Player, Vector3 } from "alt-server";
 import { OnClient } from "server-src/util/decorator/EventDecorators";

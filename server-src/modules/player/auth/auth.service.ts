@@ -15,11 +15,16 @@ export class AuthService {
 		user.username = userData.username;
 		user.discordId = userData.id;
 		user.discordAvatarId = userData.avatar;
+		user.hwidHash = player.hwidHash;
+		user.hwidHashEx = player.hwidExHash;
 		user.lastIp = player.ip;
 		user.save();
 	}
 
 	public loginUser(player: Player, user: User): void {
+		user.lastIp = player.ip;
+		user.save();
+
 		player.user = user;
 		console.log("User logged in!");
 	}

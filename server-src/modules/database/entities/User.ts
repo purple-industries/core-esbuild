@@ -24,6 +24,12 @@ export class User extends BaseEntity {
 	@Column()
 	lastIp: string;
 
+	@Column()
+	hwidHash: string;
+
+	@Column()
+	hwidHashEx: string;
+
 	@CreateDateColumn({
 		type: "timestamp",
 		default: () => "CURRENT_TIMESTAMP(6)",
