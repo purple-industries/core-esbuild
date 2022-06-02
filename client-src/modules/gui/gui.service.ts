@@ -1,58 +1,56 @@
-import { WebviewService } from '../../util/handler/WebViewHandler';
-import { ScriptEvents } from '@southside-shared/constants/ScriptEvents';
-import { singleton } from 'tsyringe';
-import alt from 'alt-client';
+import { ScriptEvents } from "@southside-shared/constants/ScriptEvents";
+import { Singleton } from "@southside-shared/util/di.decorator";
+import alt from "alt-client";
+import { WebviewService } from "../../util/handler/WebViewHandler";
 
-@singleton()
+@Singleton
 export class GuiService extends WebviewService {
+	public isGuiOpen: boolean = false;
 
-  public isGuiOpen: boolean = false;
+	public initWebview(): void {
+		this.url = "http://localhost:3000/";
+		this.name = "main";
+		this.isOverlay = false;
+		this.routeToEventName = ScriptEvents.Webview.RouteTo;
+		this.start().then((view) => {
+			alt.log("cef loaded");
+		});
+		this.setInteractive(false);
+	}
 
+	/**
+	 * Changes the interactive state
+	 * @param {boolean} toggle
+	 * @returns {GuiService}
+	 */
+	public setInteractive(toggle: boolean): GuiService {
+		toggle ? this.enableInteraction() : this.disableInteraction();
+		return this;
+	}
 
-  public initWebview(): void {
-    this.url = 'http://localhost:3000/';
-    this.name = 'main';
-    this.isOverlay = false;
-    this.routeToEventName = ScriptEvents.Webview.RouteTo;
-    this.start().then(view => {
-      alt.log('cef loaded');
-    });
-    this.setInteractive(true);
-  }
+	public setRoute(route: string) {
+		this.emit(ScriptEvents.Webview.RouteTo, route);
+	}
 
-  /**
-   * Changes the interactive state
-   * @param {boolean} toggle
-   * @returns {GuiService}
-   */
-  public setInteractive(toggle: boolean): GuiService {
-    toggle ? this.enableInteraction() : this.disableInteraction();
-    return this;
-  }
+	/**
+	 * Enables the interactions with the webview
+	 * @private
+	 */
+	private enableInteraction(): void {
+		this.focus();
+		this.showCursor();
 
-  public setRoute(route: string) {
-    this.emit(ScriptEvents.Webview.RouteTo, route);
-  }
+		this.isGuiOpen = true;
+	}
 
-  /**
-   * Enables the interactions with the webview
-   * @private
-   */
-  private enableInteraction(): void {
-    this.focus();
-    this.showCursor();
+	/**
+	 * Disables the interactions with the webview
+	 * @private
+	 */
+	private disableInteraction(): void {
+		this.unfocus();
+		this.removeCursor();
 
-    this.isGuiOpen = true;
-  }
-
-  /**
-   * Disables the interactions with the webview
-   * @private
-   */
-  private disableInteraction(): void {
-    this.unfocus();
-    this.removeCursor();
-
-    this.isGuiOpen = false;
-  }
+		this.isGuiOpen = false;
+	}
 }

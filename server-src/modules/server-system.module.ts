@@ -1,10 +1,8 @@
-import { Database } from './database/database';
-import { PlayerModule } from './player/player.module';
-import { Module } from '@southside-shared/util/module.decorator';
+import { Module } from "@southside-shared/util/module.decorator";
+import { Database } from "./database/database.module";
+import { PlayerModule } from "./player/player.module";
 
 @Module({
-  imports: [Database, PlayerModule]
+	imports: [Database, PlayerModule],
 })
-export class ServerSystemModule {
-
-}
+export class ServerSystemModule {}
