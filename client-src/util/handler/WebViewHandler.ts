@@ -176,6 +176,7 @@ export class WebviewService {
    */
   public emit(eventName: string, ...args: any[]): WebviewService {
     this.webView.emit(eventName, ...args);
+    console.log(eventName);
     return this;
   }
 

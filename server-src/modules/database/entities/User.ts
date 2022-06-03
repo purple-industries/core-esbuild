@@ -1,45 +1,53 @@
 import {
-	BaseEntity,
-	Column,
-	CreateDateColumn,
-	Entity,
-	PrimaryGeneratedColumn,
-	UpdateDateColumn,
-} from "typeorm";
+  BaseEntity,
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn
+} from 'typeorm';
+import { UserStats } from '@southside-server/modules/database/entities/UserStats';
 
-@Entity()
+@Entity('users')
 export class User extends BaseEntity {
-	@PrimaryGeneratedColumn("uuid")
-	id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: number;
 
-	@Column()
-	username: string;
+  @Column({ nullable: true })
+  username: string;
 
-	@Column()
-	discordId: string;
+  @Column({ nullable: true })
+  discordId: string;
 
-	@Column()
-	discordAvatarId: string;
+  @Column({ nullable: true })
+  discordAvatarId: string;
 
-	@Column()
-	lastIp: string;
+  @Column({ nullable: true })
+  lastIp: string;
 
-	@Column()
-	hwidHash: string;
+  @Column({ nullable: true })
+  hwidHash: string;
 
-	@Column()
-	hwidHashEx: string;
+  @Column({ nullable: true })
+  hwidHashEx: string;
 
-	@CreateDateColumn({
-		type: "timestamp",
-		default: () => "CURRENT_TIMESTAMP(6)",
-	})
-	public created_at: Date;
+  @OneToOne(() => UserStats, { eager: true })
+  @JoinColumn()
+  stats: UserStats;
 
-	@UpdateDateColumn({
-		type: "timestamp",
-		default: () => "CURRENT_TIMESTAMP(6)",
-		onUpdate: "CURRENT_TIMESTAMP(6)",
-	})
-	public updated_at: Date;
+  @CreateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)'
+  })
+  public created_at: Date;
+
+  @UpdateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+    onUpdate: 'CURRENT_TIMESTAMP(6)'
+  })
+  public updated_at: Date;
+
 }
