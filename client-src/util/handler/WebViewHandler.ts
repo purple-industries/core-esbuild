@@ -5,6 +5,7 @@ import { removeAllCursors, removeCursor, showCursor } from './WebviewHelper';
 import { ScriptEvents } from '@southside-shared/constants/ScriptEvents';
 import { Singleton } from '@southside-shared/util/di.decorator';
 import { container, InjectionToken } from 'tsyringe';
+import { INotification } from '@southside-shared/interfaces/INotification';
 
 @Singleton
 export class WebviewService {
@@ -176,7 +177,11 @@ export class WebviewService {
    */
   public emit(eventName: string, ...args: any[]): WebviewService {
     this.webView.emit(eventName, ...args);
-    console.log(eventName);
+    return this;
+  }
+
+  public sendNotification(notification: INotification) {
+    this.webView.emit(ScriptEvents.Notification.Receive, notification);
     return this;
   }
 

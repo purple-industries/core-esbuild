@@ -25,7 +25,14 @@ export class AuthComponent {
     player.killStreak = 0;
     player.emit(
         ScriptEvents.Stats.ReceiveStats,
-        { name: player.user.username, kills: player.user.stats.kills, deaths: player.user.stats.deaths }
+        {
+          name: player.user.username,
+          kills: player.user.stats.kills,
+          deaths: player.user.stats.deaths,
+          activityPoints: player.user.stats.activityPoints,
+          xp: player.user.stats.xp,
+          level: player.user.stats.level
+        }
     );
   }
 }

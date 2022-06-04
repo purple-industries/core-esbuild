@@ -8,28 +8,28 @@ import { AuthService } from './auth.service';
 
 @Component
 export class AuthComponent {
-	constructor(
-			private readonly guiService: GuiService,
-			private readonly authService: AuthService
-	) {}
+  constructor(
+      private readonly guiService: GuiService,
+      private readonly authService: AuthService
+  ) {}
 
-	@OnServer(ScriptEvents.Client.ConnectionComplete)
-	public handleConnectionComplete() {
-		this.guiService.setRoute('/auth');
-		this.guiService.setInteractive(true);
-	}
+  @OnServer(ScriptEvents.Client.ConnectionComplete)
+  public handleConnectionComplete() {
+    this.guiService.setRoute('/auth');
+    this.guiService.setInteractive(true);
+  }
 
-	@OnWebview(ScriptEvents.Auth.Request)
-	public async handleAuthRequest() {
-		const token = await Discord.requestOAuth2Token('854748697480527923');
-		this.guiService.setDefaultRoute();
+  @OnWebview(ScriptEvents.Auth.Request)
+  public async handleAuthRequest() {
+    const token = await Discord.requestOAuth2Token('854748697480527923');
+    this.guiService.setDefaultRoute();
 
-		const userData = this.authService.getUserDataFromToken(token);
-		emitServer(ScriptEvents.Auth.SendUserDataToServer, userData);
-	}
+    const userData = this.authService.getUserDataFromToken(token);
+    emitServer(ScriptEvents.Auth.SendUserDataToServer, userData);
+  }
 
-	@OnServer(ScriptEvents.Stats.ReceiveStats)
-	public handleReceiveStats(stats: IStats) {
-		this.guiService.emit(ScriptEvents.Stats.ReceiveStats, stats);
-	}
+  @OnServer(ScriptEvents.Stats.ReceiveStats)
+  public handleReceiveStats(stats: IStats) {
+    this.guiService.emit(ScriptEvents.Stats.ReceiveStats, stats);
+  }
 }

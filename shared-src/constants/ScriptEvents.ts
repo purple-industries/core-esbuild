@@ -16,5 +16,8 @@ export const ScriptEvents = {
     ReceiveStats: 'gui:stats:receiveStats',
     IncrementKills: 'gui:stats:incrementKills',
     IncrementDeaths: 'gui:stats:incrementDeaths'
+  },
+  Notification: {
+    Receive: 'gui:notification:receive'
   }
 };
