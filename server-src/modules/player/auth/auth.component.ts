@@ -14,9 +14,6 @@ export class AuthComponent {
       player: Player,
       userData: IDiscordUser
   ) {
-    console.log(player.name);
-    console.log(userData);
-
     const user = await this.authService.doesAccountExist(userData.id);
     user
         ? await this.authService.loginUser(player, user)
@@ -25,6 +22,7 @@ export class AuthComponent {
     player.spawn(162.01318359375, -1007.103271484375, 29.4483642578125);
     player.rot = new Vector3(0, 0, 2.7211);
     player.model = 'mp_m_freemode_01';
+    player.killStreak = 0;
     player.emit(
         ScriptEvents.Stats.ReceiveStats,
         { name: player.user.username, kills: player.user.stats.kills, deaths: player.user.stats.deaths }

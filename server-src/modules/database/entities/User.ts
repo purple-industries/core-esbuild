@@ -33,7 +33,7 @@ export class User extends BaseEntity {
   @Column({ nullable: true })
   hwidHashEx: string;
 
-  @OneToOne(() => UserStats, { eager: true })
+  @OneToOne(() => UserStats, { eager: true, cascade: true })
   @JoinColumn()
   stats: UserStats;
 

@@ -6,13 +6,13 @@ import { AuthComponent } from './auth/auth.component';
 import { StatsComponent } from './stats/stats.component';
 
 @Module({
-	components: [AuthComponent, StatsComponent]
+  components: [AuthComponent, StatsComponent]
 })
 export class PlayerModule {
-	constructor() {}
+  constructor() {}
 
-	@On('playerConnect')
-	public onPlayerConnect(player: Player) {
-		player.emit(ScriptEvents.Client.ConnectionComplete);
-	}
+  @On('playerConnect')
+  public onPlayerConnect(player: Player) {
+    player.emit(ScriptEvents.Client.ConnectionComplete);
+  }
 }

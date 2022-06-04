@@ -22,6 +22,8 @@ export class AuthService {
     let userStats = new UserStats();
     userStats.kills = 0;
     userStats.deaths = 0;
+    userStats.level = 1;
+    userStats.xp = 0;
 
     user.stats = userStats;
     await user.save();
@@ -32,6 +34,6 @@ export class AuthService {
     await user.save();
 
     player.user = user;
-    console.log('User logged in!');
+    console.log(`User ${player.user.username} logged in!`);
   }
 }

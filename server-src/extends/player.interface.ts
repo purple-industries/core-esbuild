@@ -1,21 +1,22 @@
-import { User } from "@southside-server/modules/database/entities/User";
+import { User } from '@southside-server/modules/database/entities/User';
 
 export interface PlayerInterface {
-	currentVehicle: number | null;
+  currentVehicle: number | null;
 
-	user: User;
+  user: User;
 
-	/* 	sendNotifyWithImage(
-		message: string,
-		title: string,
-		subtitle: string,
-		notifyImage: any,
-		imageType: number,
-		bgColor: number,
-		durationMultiplier: number
-	): void;
+  killStreak: number;
+  /* 	sendNotifyWithImage(
+    message: string,
+    title: string,
+    subtitle: string,
+    notifyImage: any,
+    imageType: number,
+    bgColor: number,
+    durationMultiplier: number
+  ): void;
 
-	sendNotify(message: string): void;
+  sendNotify(message: string): void;
 
-	emitClient(eventName: string, ...args: any[]): void; */
+  emitClient(eventName: string, ...args: any[]): void; */
 }

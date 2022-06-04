@@ -22,7 +22,7 @@ export class Database {
       database: process.env.DB_NAME,
       entities: [User, UserStats],
       synchronize: true,
-      logging: true
+      logging: false
     })
         .initialize()
         .then((database) => {

@@ -8,6 +8,6 @@ export class StatsComponent {
 
   @OnClient(ScriptEvents.Stats.RequestStats)
   public handleRequestStats(player: Player) {
-    player.emit(ScriptEvents.Stats.ReceiveStats, { name: player.user.username, kills: 0, deaths: 0 });
+    player.emit(ScriptEvents.Stats.ReceiveStats, { name: player.user.username, kills: 0, deaths: 0, level: 0, xp: 0 });
   }
 }

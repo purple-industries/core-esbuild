@@ -10,4 +10,17 @@ export class UserStats extends BaseEntity {
 
   @Column({ nullable: true })
   deaths: number = 0;
+
+  @Column({ nullable: true })
+  level: number = 1;
+
+  @Column({ nullable: true })
+  xp: number = 0;
+
+  @Column({ nullable: true })
+  activityPoints: number = 0;
+
+  @Column({ nullable: true })
+  maxKillstreak: number = 0;
+
 }
