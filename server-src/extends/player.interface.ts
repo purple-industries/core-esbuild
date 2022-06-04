@@ -6,6 +6,9 @@ export interface PlayerInterface {
   user: User;
 
   killStreak: number;
+
+  emitGui(eventName: string, ...args: any[]);
+
   /* 	sendNotifyWithImage(
     message: string,
     title: string,

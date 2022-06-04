@@ -1,6 +1,6 @@
 export const ScriptEvents = {
   Webview: {
-    EmitToServer: 'gui:emitToServer',
+    EmitToServer: 'gui:webview:emitServer',
     EmitToGuiFromServer: 'gui:emitToGui',
     RouteTo: 'gui:webview:setRoute'
   },

@@ -1,61 +1,79 @@
-import { ScriptEvents } from "@southside-shared/constants/ScriptEvents";
-import { Singleton } from "@southside-shared/util/di.decorator";
-import alt from "alt-client";
-import { WebviewService } from "../../util/handler/WebViewHandler";
+import { ScriptEvents } from '@southside-shared/constants/ScriptEvents';
+import { Singleton } from '@southside-shared/util/di.decorator';
+import alt from 'alt-client';
+import { WebviewService } from '../../util/handler/WebViewHandler';
 
 @Singleton
 export class GuiService extends WebviewService {
-	public isGuiOpen: boolean = false;
+  public isGuiOpen: boolean = false;
 
-	public initWebview(): void {
-		this.url = "http://localhost:3000";
-		this.name = "main";
-		this.isOverlay = false;
-		this.routeToEventName = ScriptEvents.Webview.RouteTo;
-		this.start().then((view) => {
-			alt.log("cef loaded");
-		});
-		this.setInteractive(false);
-	}
+  public initWebview(): void {
+    this.url = 'http://localhost:3000';
+    this.name = 'main';
+    this.isOverlay = false;
+    this.routeToEventName = ScriptEvents.Webview.RouteTo;
+    this.start().then((view) => {
+      alt.log('cef loaded');
+      this.listenWebviewToServer();
+      this.listenServerToWebview();
+    });
+    this.setInteractive(false);
+  }
 
-	/**
-	 * Changes the interactive state
-	 * @param {boolean} toggle
-	 * @returns {GuiService}
-	 */
-	public setInteractive(toggle: boolean): GuiService {
-		toggle ? this.enableInteraction() : this.disableInteraction();
-		return this;
-	}
 
-	public setRoute(route: string) {
-		this.emit(ScriptEvents.Webview.RouteTo, route);
-	}
+  /**
+   * Changes the interactive state
+   * @param {boolean} toggle
+   * @returns {GuiService}
+   */
+  public setInteractive(toggle: boolean): GuiService {
+    toggle ? this.enableInteraction() : this.disableInteraction();
+    return this;
+  }
 
-	public setDefaultRoute() {
-		this.setInteractive(false);
-		this.setRoute("/");
-	}
+  public setRoute(route: string) {
+    this.emit(ScriptEvents.Webview.RouteTo, route);
+  }
 
-	/**
-	 * Enables the interactions with the webview
-	 * @private
-	 */
-	private enableInteraction(): void {
-		this.focus();
-		this.showCursor();
+  public setDefaultRoute() {
+    this.setInteractive(false);
+    this.setRoute('/');
+  }
 
-		this.isGuiOpen = true;
-	}
+  /**
+   * Enables the interactions with the webview
+   * @private
+   */
+  private enableInteraction(): void {
+    this.focus();
+    this.showCursor();
 
-	/**
-	 * Disables the interactions with the webview
-	 * @private
-	 */
-	private disableInteraction(): void {
-		this.unfocus();
-		this.removeCursor();
+    this.isGuiOpen = true;
+  }
 
-		this.isGuiOpen = false;
-	}
+  /**
+   * Disables the interactions with the webview
+   * @private
+   */
+  private disableInteraction(): void {
+    this.unfocus();
+    this.removeCursor();
+
+    this.isGuiOpen = false;
+  }
+
+  private listenServerToWebview() {
+    alt.onServer(ScriptEvents.Webview.EmitToGuiFromServer, (eventName: string, ...args: any[]) => {
+      alt.log(`received from server: ${eventName}`);
+      this.webviewInstance.emit(eventName, args);
+    });
+  }
+
+  private listenWebviewToServer() {
+    this.webviewInstance.on(ScriptEvents.Webview.EmitToServer, (eventName: string, ...args: any[]) => {
+      alt.log(`received from gui: ${eventName}`);
+      alt.emitServer(eventName, args);
+    });
+  }
+
 }
