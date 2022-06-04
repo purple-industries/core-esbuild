@@ -3,6 +3,7 @@ import { OnServer, OnWebview } from '@southside-client/util/decorator/EventDecor
 import { ScriptEvents } from '@southside-shared/constants/ScriptEvents';
 import { GuiService } from '@southside-client/modules/gui/gui.service';
 import { emitServer } from 'alt-client';
+import type { IStats } from '@southside-shared/interfaces/IStats';
 
 @Component
 export class StatsComponent {
@@ -21,4 +22,10 @@ export class StatsComponent {
   public handleRequestStats() {
     emitServer(ScriptEvents.Stats.RequestStats);
   }
+
+  @OnServer(ScriptEvents.Stats.UpdateStats)
+  public handleUpdateStats(stats: IStats) {
+    this.guiService.emit(ScriptEvents.Stats.UpdateStats, stats);
+  }
+
 }

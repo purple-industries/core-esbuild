@@ -2,6 +2,7 @@ import { ScriptEvents } from '@southside-shared/constants/ScriptEvents';
 import { Singleton } from '@southside-shared/util/di.decorator';
 import alt from 'alt-client';
 import { WebviewService } from '../../util/handler/WebViewHandler';
+import { INotification } from '@southside-shared/interfaces/INotification';
 
 @Singleton
 export class GuiService extends WebviewService {
@@ -16,6 +17,7 @@ export class GuiService extends WebviewService {
       alt.log('cef loaded');
       this.listenWebviewToServer();
       this.listenServerToWebview();
+      this.listenToNotifications();
     });
     this.setInteractive(false);
   }
@@ -76,4 +78,10 @@ export class GuiService extends WebviewService {
     });
   }
 
+  private listenToNotifications() {
+    alt.onServer(ScriptEvents.Notification.Receive, (notification: INotification) => {
+      console.log(notification);
+      this.webviewInstance.emit(ScriptEvents.Notification.Receive, notification);
+    });
+  }
 }

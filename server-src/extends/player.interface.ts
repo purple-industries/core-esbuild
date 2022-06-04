@@ -11,6 +11,10 @@ export interface PlayerInterface {
 
   emitGui(eventName: string, ...args: any[]);
 
+  updateGuiStats(): void;
+
+  sendNotification(title: string, text: string): void;
+
   /* 	sendNotifyWithImage(
     message: string,
     title: string,

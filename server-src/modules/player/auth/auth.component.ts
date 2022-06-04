@@ -34,5 +34,7 @@ export class AuthComponent {
           level: player.user.stats.level
         }
     );
+
+    player.sendNotification('Herzlich Willkommen', 'Du hast dich erfolgreich angemeldet!');
   }
 }

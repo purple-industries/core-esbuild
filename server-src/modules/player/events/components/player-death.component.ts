@@ -1,7 +1,6 @@
 import { Component } from '@southside-shared/util/di.decorator';
 import { On } from '@southside-server/util/decorator/EventDecorators';
 import alt, { Entity, Player, Vector3 } from 'alt-server';
-import { ScriptEvents } from '@southside-shared/constants/ScriptEvents';
 
 
 @Component
@@ -18,7 +17,7 @@ export class PlayerDeathComponent {
   }
 
   private handleVictim(victim: Player) {
-    victim.emit(ScriptEvents.Stats.IncrementDeaths);
+    victim.updateGuiStats();
     victim.spawn(162.01318359375, -1007.103271484375, 29.4483642578125, 5);
     victim.rot = new Vector3(0, 0, 2.7211);
     victim.user.stats.deaths++;
@@ -27,8 +26,8 @@ export class PlayerDeathComponent {
 
   private handleKiller(killer: Player, victim: Player, weaponHash: number) {
     alt.log(`Player ${killer.user.username} killed Player ${victim.user.username}. (Killed with weaponHash: ${weaponHash})`);
-    killer.emit(ScriptEvents.Stats.IncrementKills);
     killer.user.stats.kills++;
+    killer.updateGuiStats();
 
     killer.killStreak++;
     if (killer.killStreak > killer.user.stats.maxKillstreak) {
