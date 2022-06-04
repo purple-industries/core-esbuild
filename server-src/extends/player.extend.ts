@@ -3,13 +3,15 @@ import { Player } from 'alt-server';
 import { ScriptEvents } from '@southside-shared/constants/ScriptEvents';
 
 export class PlayerExtend extends Player {
-	currentVehicle: number | null = null;
+  currentVehicle: number | null = null;
 
-	user: User;
+  user: User;
 
-	killStreak: number = 0;
+  killStreak: number = 0;
 
-	public emitGui(eventName: string, ...args: any[]) {
-		this.emit(ScriptEvents.Webview.EmitToGuiFromServer, eventName, args);
-	}
+  isLoggedIn: boolean = false;
+
+  public emitGui(eventName: string, ...args: any[]) {
+    this.emit(ScriptEvents.Webview.EmitToGuiFromServer, eventName, args);
+  }
 }

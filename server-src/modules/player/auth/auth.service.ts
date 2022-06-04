@@ -6,8 +6,9 @@ import { UserStats } from '@southside-server/modules/database/entities/UserStats
 
 @Singleton
 export class AuthService {
-  public async doesAccountExist(discordId: string): Promise<User | null> {
-    return await User.findOne({ where: { discordId: discordId } });
+  public async doesAccountExist(player: Player, discordId: string): Promise<User> {
+    let user = await User.findOne({ where: { discordId: discordId } });
+    return user;
   }
 
   public async createAccount(player: Player, userData: IDiscordUser): Promise<void> {
@@ -18,6 +19,7 @@ export class AuthService {
     user.hwidHash = player.hwidHash;
     user.hwidHashEx = player.hwidExHash;
     user.lastIp = player.ip;
+    user.isBanned = false;
 
     let userStats = new UserStats();
     userStats.kills = 0;
@@ -30,10 +32,25 @@ export class AuthService {
   }
 
   public async loginUser(player: Player, user: User): Promise<void> {
+    await this.checkUserBanned(player, user);
+
     user.lastIp = player.ip;
     await user.save();
 
+    player.isLoggedIn = true;
     player.user = user;
     console.log(`User ${player.user.username} logged in!`);
+  }
+
+  private async checkUserBanned(player: Player, user: User): Promise<void> {
+    let dbUser = await User.find({ where: { discordId: user.discordId } });
+    if (user.isBanned) return player.kick('Du wurdest gesperrt. Bitte melde dich im Support!');
+
+    dbUser = await User.find({ where: { hwidHashEx: user.hwidHashEx } });
+    if (user.isBanned) return player.kick('Du wurdest gesperrt. Bitte melde dich im Support!');
+
+    dbUser = await User.find({ where: { hwidHash: player.hwidHash } });
+    if (user.isBanned) return player.kick('Du wurdest gesperrt. Bitte melde dich im Support!');
+
   }
 }

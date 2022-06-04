@@ -7,6 +7,8 @@ export interface PlayerInterface {
 
   killStreak: number;
 
+  isLoggedIn: boolean;
+
   emitGui(eventName: string, ...args: any[]);
 
   /* 	sendNotifyWithImage(

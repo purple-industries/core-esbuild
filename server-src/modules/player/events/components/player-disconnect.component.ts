@@ -12,7 +12,8 @@ export class PlayerDisconnectComponent {
   @On('playerDisconnect')
   public async handlePlayerDisconnect(player: Player, reason: string) {
     await player.user.save();
-    alt.log(`Player ${player.user.username} saved!"`);
+    player.isLoggedIn = false;
+    alt.log(`Player ${player.user.username} left the server!"`);
   }
 
   private async handleInterrupt() {
@@ -23,6 +24,7 @@ export class PlayerDisconnectComponent {
 
   private async savePlayers(): Promise<void> {
     for (const player of alt.Player.all) {
+      if (!player.isLoggedIn) continue;
       await player.user.save();
       alt.log(`Player ${player.user.username} saved!`);
     }

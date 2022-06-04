@@ -14,7 +14,7 @@ export class AuthComponent {
       player: Player,
       userData: IDiscordUser
   ) {
-    const user = await this.authService.doesAccountExist(userData.id);
+    const user = await this.authService.doesAccountExist(player, userData.id);
     user
         ? await this.authService.loginUser(player, user)
         : await this.authService.createAccount(player, userData);
