@@ -31,10 +31,14 @@ export class User extends BaseEntity {
   hwidHash: string;
 
   @Column({ nullable: true })
+  hwidHashEx: string;
+
+  @Column({ nullable: true })
   isBanned: boolean = false;
 
   @Column({ nullable: true })
-  hwidHashEx: string;
+  isAdmin: boolean = false;
+
 
   @OneToOne(() => UserStats, { eager: true, cascade: true })
   @JoinColumn()

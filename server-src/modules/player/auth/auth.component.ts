@@ -14,7 +14,10 @@ export class AuthComponent {
       player: Player,
       userData: IDiscordUser
   ) {
-    const user = await this.authService.doesAccountExist(player, userData.id);
+    const user = await this.authService.doesAccountExist(
+        player,
+        userData.id
+    );
     user
         ? await this.authService.loginUser(player, user)
         : await this.authService.createAccount(player, userData);
@@ -23,18 +26,19 @@ export class AuthComponent {
     player.rot = new Vector3(0, 0, 2.7211);
     player.model = 'mp_m_freemode_01';
     player.killStreak = 0;
-    player.emit(
-        ScriptEvents.Stats.ReceiveStats,
-        {
-          name: player.user.username,
-          kills: player.user.stats.kills,
-          deaths: player.user.stats.deaths,
-          activityPoints: player.user.stats.activityPoints,
-          xp: player.user.stats.xp,
-          level: player.user.stats.level
-        }
+    player.emit(ScriptEvents.Stats.ReceiveStats, {
+      name: player.user.username,
+      kills: player.user.stats.kills,
+      deaths: player.user.stats.deaths,
+      activityPoints: player.user.stats.activityPoints,
+      xp: player.user.stats.xp,
+      level: player.user.stats.level
+    });
+
+    player.sendNotification(
+        'Herzlich Willkommen',
+        'Du hast dich erfolgreich angemeldet!'
     );
 
-    player.sendNotification('Herzlich Willkommen', 'Du hast dich erfolgreich angemeldet!');
   }
 }

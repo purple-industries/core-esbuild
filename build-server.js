@@ -6,7 +6,8 @@ build({
   banner: {
     js: 'import { createRequire as topLevelCreateRequire } from \'module\';\n const require = topLevelCreateRequire(import.meta.url);',
   },
-  watch: true,
+
+  watch: false,
   bundle: true,
   target: 'esnext',
   logLevel: 'error',
@@ -20,10 +21,10 @@ build({
       hotReload: {
         clientPath: './client-dist.js',
       },
-      reconnectPlayers: {delay: 2000},
+      reconnectPlayers: false,
     }),
-
   ],
+
   external: [
     'fs',
     'path',

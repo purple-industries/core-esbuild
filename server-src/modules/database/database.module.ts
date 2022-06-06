@@ -12,14 +12,24 @@ export class Database {
     this.initialize();
   }
 
+  /**
+   *
+   * DB_HOST=localhost
+   * DB_PORT=3306
+   * DB_USERNAME=southside
+   * DB_PASSWORD=test123
+   * DB_NAME=southside
+   * DEV=false
+   * @private
+   */
   private initialize() {
     new DataSource({
       type: 'mariadb',
-      host: process.env.DB_HOST,
-      port: Number(process.env.DB_PORT),
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME,
+      host: 'localhost',
+      port: 3306,
+      username: 'southside',
+      password: 'test123',
+      database: 'southside',
       entities: [User, UserStats],
       synchronize: true,
       logging: false

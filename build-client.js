@@ -2,7 +2,7 @@ import {build} from 'esbuild';
 import {esbuildDecorators} from '@anatine/esbuild-decorators';
 
 build({
-  watch: true,
+  watch: false,
   bundle: true,
   target: 'esnext',
   logLevel: 'error',

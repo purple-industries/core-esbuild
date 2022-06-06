@@ -20,6 +20,7 @@ export class AuthService {
     user.hwidHashEx = player.hwidExHash;
     user.lastIp = player.ip;
     user.isBanned = false;
+    user.isAdmin = false;
 
     let userStats = new UserStats();
     userStats.kills = 0;

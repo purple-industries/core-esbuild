@@ -20,5 +20,15 @@ export const ScriptEvents = {
   },
   Notification: {
     Receive: 'gui:notification:receive'
+  },
+  Control: {
+    DisableAll: 'client:player:disableAllControls',
+    EnableAll: 'client:player:enableAllControls',
+    ToggleGameControls: 'client:player:toggleGameControls'
+  },
+  Countdown: { StartCountdown: 'client:countdown:startCountdown' },
+  Queue: {
+    Register: 'queue:registerQueue'
   }
+
 };

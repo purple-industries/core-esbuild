@@ -9,12 +9,14 @@ export class GuiService extends WebviewService {
   public isGuiOpen: boolean = false;
 
   public initWebview(): void {
-    this.url = 'http://localhost:3000/';
+    // this.url = 'http://localhost:3000/';
+    this.url = 'http://resource/dist/index.html';
     this.name = 'main';
     this.isOverlay = false;
     this.routeToEventName = ScriptEvents.Webview.RouteTo;
     this.start().then((view) => {
       alt.log('cef loaded');
+      console.log(this.url);
       this.listenWebviewToServer();
       this.listenServerToWebview();
       this.listenToNotifications();

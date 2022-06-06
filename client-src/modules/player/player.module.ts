@@ -7,9 +7,10 @@ import { log } from 'alt-shared';
 import { WatermarkPosition } from './../../util/altv.enums';
 import { AuthComponent } from './auth/auth.component';
 import { StatsComponent } from '@southside-client/modules/player/stats/stats.component';
+import { PlayerControlsComponent } from '@southside-client/modules/player/controls/player-controls.component';
 
 @Module({
-  components: [AuthComponent, StatsComponent]
+  components: [AuthComponent, StatsComponent, PlayerControlsComponent]
 })
 export class PlayerModule {
   @OnServer(ScriptEvents.Client.ConnectionComplete)

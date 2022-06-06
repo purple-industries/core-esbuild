@@ -5,15 +5,18 @@ import alt, { Entity, Player, Vector3 } from 'alt-server';
 
 @Component
 export class PlayerDeathComponent {
+
   @On('playerDeath')
   public handlePlayerDeath(victim: Player, killer: Entity, weaponHash: number) {
     this.handleVictim(victim);
+    if (victim.lobby) return;
+
     if (killer instanceof Player) {
       this.handleKiller(killer, victim, weaponHash);
-
     } else {
       alt.log(`Player ${victim.user.username} died. (Killed with weaponHash: ${weaponHash})`);
     }
+    
   }
 
   private handleVictim(victim: Player) {
