@@ -12,8 +12,6 @@ export class AuthService {
     const result = await httpClient.get(
         'https://discord.com/api/users/@me'
     );
-
-    console.log(JSON.stringify(result), token);
     if (result.statusCode !== 200) return null;
     return JSON.parse(result.body);
   }

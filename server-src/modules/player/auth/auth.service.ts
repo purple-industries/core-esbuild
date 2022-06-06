@@ -29,6 +29,7 @@ export class AuthService {
 
     user.stats = userStats;
     await user.save();
+    player.user = user;
     return user;
   }
 
