@@ -7,11 +7,10 @@ import { UserStats } from '@southside-server/modules/database/entities/UserStats
 @Singleton
 export class AuthService {
   public async doesAccountExist(player: Player, discordId: string): Promise<User> {
-    let user = await User.findOne({ where: { discordId: discordId } });
-    return user;
+    return await User.findOne({ where: { discordId: discordId } });
   }
 
-  public async createAccount(player: Player, userData: IDiscordUser): Promise<void> {
+  public async createAccount(player: Player, userData: IDiscordUser): Promise<User> {
     let user = new User();
     user.username = userData.username;
     user.discordId = userData.id;
@@ -30,6 +29,7 @@ export class AuthService {
 
     user.stats = userStats;
     await user.save();
+    return user;
   }
 
   public async loginUser(player: Player, user: User): Promise<void> {

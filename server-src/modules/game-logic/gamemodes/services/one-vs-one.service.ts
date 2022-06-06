@@ -9,6 +9,7 @@ import { shuffleArray } from '@southside-shared/util/algorithms';
 export class OneVsOneService {
 
   public initializeGamemode(lobby: FightingLobby) {
+    console.log(`initialize gamemode`);
     if (!this.isAbleToStart(lobby)) return;
     lobby.isRunning = true;
     let players = shuffleArray(lobby.players);

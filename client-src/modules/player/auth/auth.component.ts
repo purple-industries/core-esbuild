@@ -24,7 +24,7 @@ export class AuthComponent {
     const token = await Discord.requestOAuth2Token('854748697480527923');
     this.guiService.setDefaultRoute();
 
-    const userData = this.authService.getUserDataFromToken(token);
+    const userData = await this.authService.getUserDataFromToken(token);
     emitServer(ScriptEvents.Auth.SendUserDataToServer, userData);
   }
 

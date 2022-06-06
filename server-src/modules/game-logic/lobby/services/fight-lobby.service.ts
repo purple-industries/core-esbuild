@@ -19,10 +19,12 @@ export class FightLobbyService {
   public queuePlayerUp(player: Player, requestedGamemode: GameModeType) {
     let lobby: FightingLobby = null;
     if (this.fightLobbyPool.entriesAsArray().length > 0) {
+      console.log(`lobby exists`);
       lobby = this.fightLobbyPool.entriesAsArray().find((lobby: FightingLobby) => lobby.players.length < this.MAX_LOBBY_MEMBER && lobby.gameMode === requestedGamemode);
       if (!lobby.isRunning)
         this.tryAddPlayerToLobby(player, lobby);
     } else {
+      console.log(`lobby does not exist`);
       lobby = this.createLobby(requestedGamemode);
       if (!this.tryAddPlayerToLobby(player, lobby)) this.queuePlayerUp(player, requestedGamemode);
     }
@@ -30,7 +32,10 @@ export class FightLobbyService {
   }
 
   private tryStartLobby(lobby: FightingLobby) {
+    console.log(`try lobby start`);
+    console.log(JSON.stringify(lobby.players));
     if (!(lobby.players.length > 1)) return;
+    console.log(`more than 1 player`);
     switch (lobby.gameMode) {
       case GameModeType.CrewWars:
         this.initializeCrewWars(lobby);
@@ -67,6 +72,7 @@ export class FightLobbyService {
     lobby.gameMode = requestedGamemode;
     lobby.id = this.currentLobbyId++;
     lobby.map = this.getRandomMap();
+    this.fightLobbyPool.upsert(lobby.id, lobby);
     return lobby;
   }
 
