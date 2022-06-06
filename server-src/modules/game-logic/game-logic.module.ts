@@ -4,8 +4,11 @@ import { ScriptEvents } from '@southside-shared/constants/ScriptEvents';
 import { Player } from 'alt-server';
 import { GameModeType } from '@southside-shared/enums/LobbyType.enums';
 import { FightLobbyService } from '@southside-server/modules/game-logic/lobby/services/fight-lobby.service';
+import { GamemodesComponent } from '@southside-server/modules/game-logic/gamemodes/gamemodes.component';
 
-@Module({})
+@Module({
+  components: [GamemodesComponent]
+})
 export class GameLogicModule {
   constructor(
       private readonly fightLobbyService: FightLobbyService

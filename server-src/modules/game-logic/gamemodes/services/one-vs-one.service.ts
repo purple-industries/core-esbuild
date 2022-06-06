@@ -27,9 +27,6 @@ export class OneVsOneService {
       player.player.lobby = lobby;
       player.player.removeAllWeapons();
 
-      oneVsOneConfig.weapons.forEach(weapon => {
-        player.player.giveWeapon(alt.hash(weapon.name), weapon.ammo, weapon.equipNow);
-      });
 
       player.player.freeze(true);
       player.player.emit(ScriptEvents.Countdown.StartCountdown, oneVsOneConfig.countdown);
@@ -41,6 +38,9 @@ export class OneVsOneService {
   }
 
   public startGameMode(player) {
+    oneVsOneConfig.weapons.forEach(weapon => {
+      player.player.giveWeapon(alt.hash(weapon.name), weapon.ammo, weapon.equipNow);
+    });
     player.player.freeze(false);
   }
 
@@ -50,9 +50,12 @@ export class OneVsOneService {
     const victimStandingIdx = lobby.standings.players.findIndex((player, idx) => player.player.id === victim.id);
     const killerStandingIdx = lobby.standings.players.findIndex((player, idx) => player.player.id === killer.id);
 
+    lobby.players.forEach((player) => player.player.removeAllWeapons());
+
     lobby.standings.deaths[victimStandingIdx]++;
     lobby.standings.kills[killerStandingIdx]++;
-
+    console.log('Kills ' + JSON.stringify(lobby.standings.kills, null, 4));
+    console.log('Tode: ' + JSON.stringify(lobby.standings.deaths, null, 4));
     if (lobby.standings.kills[killerStandingIdx] === oneVsOneConfig.winCondition) {
       this.endGamemodeForLobby(lobby, killer, victim);
     } else {

@@ -2,6 +2,7 @@ import { Component } from '@southside-shared/util/di.decorator';
 import { OnServer } from '@southside-client/util/decorator/EventDecorator';
 import { ScriptEvents } from '@southside-shared/constants/ScriptEvents';
 import alt from 'alt-client';
+import * as natives from 'natives';
 
 @Component
 export class PlayerControlsComponent {
@@ -11,15 +12,17 @@ export class PlayerControlsComponent {
 
   @OnServer(ScriptEvents.Control.ToggleGameControls)
   public handleToggleGameControls(toggle: boolean) {
+    natives.clearPedTasksImmediately(alt.Player.local);
     if (toggle) {
       if (this.everyTickHandleTwo) alt.clearEveryTick(this.everyTickHandleTwo);
       this.everyTickHandle = alt.everyTick(() => {
-        alt.toggleGameControls(!toggle);
+        natives.disableAllControlActions(alt.Player.local.scriptID);
+
       });
     } else {
       alt.clearEveryTick(this.everyTickHandle);
       this.everyTickHandleTwo = alt.everyTick(() => {
-        alt.toggleGameControls(!toggle);
+        natives.enableAllControlActions(alt.Player.local.scriptID);
       });
     }
 

@@ -10,7 +10,7 @@ export class GuiService extends WebviewService {
 
   public initWebview(): void {
     // this.url = 'http://localhost:3000/';
-    this.url = 'http://resource/dist/index.html';
+    this.url = process.env.DEV ? 'http://localhost:3000/' : 'http://resource/dist/index.html';
     this.name = 'main';
     this.isOverlay = false;
     this.routeToEventName = ScriptEvents.Webview.RouteTo;

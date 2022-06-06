@@ -3,6 +3,8 @@ import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 import { User } from './entities/User';
 import { UserStats } from '@southside-server/modules/database/entities/UserStats';
+//@ts-ignore
+import * as env from 'env';
 
 @Module({})
 export class Database {
@@ -25,14 +27,14 @@ export class Database {
   private initialize() {
     new DataSource({
       type: 'mariadb',
-      host: 'localhost',
-      port: 3306,
-      username: 'southside',
-      password: 'test123',
-      database: 'southside',
+      host: process.env.DB_HOST,
+      port: Number(process.env.DB_PORT),
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
       entities: [User, UserStats],
       synchronize: true,
-      logging: false
+      logging: !!process.env.DEV
     })
         .initialize()
         .then((database) => {

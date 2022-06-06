@@ -29,6 +29,10 @@ export const ScriptEvents = {
   Countdown: { StartCountdown: 'client:countdown:startCountdown' },
   Queue: {
     Register: 'queue:registerQueue'
+  },
+  OneVsOne: {
+    PlayerKill: 'onevsone:PlayerKill'
   }
+
 
 };
