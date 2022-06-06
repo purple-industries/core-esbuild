@@ -4,9 +4,12 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start-server": "node --es-module-specifier-resolution=node build-server.js",
-    "start-client": "node --es-module-specifier-resolution=node build-client.js",
-    "start": "concurrently npm:start-*"
+    "start-server": "node --es-module-specifier-resolution=node dev-server.js",
+    "start-client": "node --es-module-specifier-resolution=node dev-client.js",
+    "start": "concurrently npm:start-*",
+    "build-server": "node --es-module-specifier-resolution=node build-server.js",
+    "build-client": "node --es-module-specifier-resolution=node build-client.js",
+    "build": "concurrently npm:build-*"
   },
   "dependencies": {
     "@altv/types-client": "^2.0.0",

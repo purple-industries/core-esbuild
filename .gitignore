@@ -6,3 +6,4 @@
 client-dist.js
 server-dist.js
 dist
+/outDir/
