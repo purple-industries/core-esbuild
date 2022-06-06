@@ -5,3 +5,4 @@
 /node_modules/
 client-dist.js
 server-dist.js
+dist
